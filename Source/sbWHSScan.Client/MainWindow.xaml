@@ -1,0 +1,57 @@
+﻿<Window x:Class="sbWHSScan.Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sb="clr-namespace:sbWHSScan.Client"
+        Title="MainWindow" DataContext="{Binding}" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="300" d:DesignWidth="525" SizeToContent="WidthAndHeight">
+    <StackPanel>
+        <StackPanel Name="SelectScannerPanel" IsEnabled="False"  Grid.IsSharedSizeScope="True" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="FirstColumn" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Select Scanner" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
+                <ComboBox Grid.Row="0" Grid.Column="1" Height="23" Name="Scanner" VerticalAlignment="Top" Width="383" DisplayMemberPath="DeviceName" ItemsSource="{Binding Path=Scanners}" SelectedItem="{Binding Path=Scanner,Mode=TwoWay}" />
+                <Label Grid.Row="1" Grid.Column="0" Content="Paper Size" />
+                <ComboBox Grid.Row="1" Grid.Column="1" Name="PaperSize" Margin="0,0,0,4" Width="383" ItemsSource="{Binding Path=PaperSizes}" SelectedItem="{Binding Path=PaperSize,Mode=TwoWay}"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="Scan Source" />
+                <ComboBox Grid.Row="2" Grid.Column="1" Name="ScanSource" Margin="0,0,0,4" Width="383" ItemsSource="{Binding Path=ScanSources}" SelectedItem="{Binding Path=ScanSource,Mode=TwoWay}"/>
+                <Label Grid.Row="3" Grid.Column="0" Content="Scan Destination" />
+                <ComboBox Grid.Row="3" Grid.Column="1" Name="ScanDestination" Margin="0,0,0,4" Width="383" ItemsSource="{Binding Path=ScanDestinations}" SelectedItem="{Binding Path=ScanDestination,Mode=TwoWay}"/>
+                <GroupBox Grid.Row="4" Grid.ColumnSpan="2" Header="Email Settings" Name="EmailSettingsGroup">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="FirstColumn" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Email Provider" />
+                        <ComboBox Grid.Row="0" Grid.Column="1" Height="23" HorizontalAlignment="Left" Name="EmailProvider" VerticalAlignment="Top" Width="383" ItemsSource="{Binding Path=EmailProviders}" SelectedItem="{Binding Path=EmailProvider,Mode=TwoWay}" />
+                        <Label Grid.Row="1" Grid.Column="0" Content="Email Address" />
+                        <TextBox Grid.Column="1" Grid.Row="1" Height="23" Name="EmailAddress" Width="383" Text="{Binding EmailAddress,Mode=TwoWay}" />
+                        <Label Grid.Row="2" Grid.Column="0" Content="Email Password" />
+                        <sb:BindablePasswordBox Grid.Column="1" Grid.Row="2" Height="23" x:Name="EmailPassword" Password="{Binding EmailPassword}" Width="383" />
+                    </Grid>
+                </GroupBox>
+                <Button Grid.Row="6" Grid.Column="0" Content="Scan" Margin="0,0,0,4" Height="23" HorizontalAlignment="Left" Name="ScanButton" VerticalAlignment="Center" Width="75" Click="ScanButton_Click" />
+                <Label Grid.Row="6" Grid.Column="1" Content="{Binding Status}" Foreground="Red" />
+            </Grid>
+        </StackPanel>
+    </StackPanel>
+</Window>
