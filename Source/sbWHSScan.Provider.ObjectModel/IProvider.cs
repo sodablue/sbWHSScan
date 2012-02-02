@@ -1,14 +1,17 @@
 using System.ServiceModel;
 using Microsoft.WindowsServerSolutions.Common.ProviderFramework;
-using sbWHSScan.Provider.ObjectModel.Messages;
+using sbWHSScan.ScanObjectModel.Messages;
 
-namespace sbWHSScan.Provider.ObjectModel
+namespace sbWHSScan.ScanObjectModel
 {
-    [ProviderEndpointBehavior(CredentialType.User)]
+    [ProviderEndpointBehavior(CredentialType.User,ConnectionSetting.AllowRemoteAccess)]
     [ServiceContract(CallbackContract = typeof(IProviderCallback))]
     public interface IProvider
     {
         [OperationContract(IsOneWay = true)]
-        void SendRequest(RequestMessageBase message);
+        void SendScannerListRequest(GetScannerListRequest message);
+
+        [OperationContract(IsOneWay = true)]
+        void SendScanToEmailRequest(ScanToEmailRequest message);
     }
 }

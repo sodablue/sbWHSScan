@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace sbWHSScan.Provider.ObjectModel.Messages
+namespace sbWHSScan.ScanObjectModel.Messages
 {
     public class GetScannerListRequest : RequestMessageBase
     {

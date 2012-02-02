@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.WindowsServerSolutions.Common.ProviderFramework;
+using log4net.Config;
+using System.IO;
+using Topshelf;
 
 namespace sbWHSScan.Provider
 {
@@ -10,15 +13,32 @@ namespace sbWHSScan.Provider
     {
         static void Main(string[] args)
         {
-            //This Initialize method is needed to link to Windows Server references that are not GACed
-            Microsoft.WindowsServerSolutions.Common.WindowsServerSolutionsEnvironment.Initialize();
+            XmlConfigurator.ConfigureAndWatch(
+                new FileInfo(".\\log4net.config"));
 
-            ProviderHost host = new ProviderHost(typeof(ProviderService), "provider");
-            
-            host.Open();
+            var host = HostFactory.New(x =>
+            {
+                x.EnableDashboard();
+                x.Service<WHSScanProvider>(s =>
+                {
+                    s.SetServiceName("WHSScanProvider");
+                    s.ConstructUsing(name => new WHSScanProvider());
+                    s.WhenStarted(tc =>
+                    {
+                        XmlConfigurator.ConfigureAndWatch(
+                            new FileInfo(".\\log4net.config"));
+                        tc.Start();
+                    });
+                    s.WhenStopped(tc => tc.Stop());
+                });
 
-            System.Console.ReadLine();
-            host.Dispose();
+                x.RunAsLocalSystem();
+                x.SetDescription("WHSScanProvider Description");
+                x.SetDisplayName("WHSScanProvider");
+                x.SetServiceName("WHSScanProvider");
+            });
+
+            host.Run();
         }
     }
 }

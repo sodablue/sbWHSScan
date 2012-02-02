@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using sbWHSScan.Provider.ObjectModel.Messages;
+using sbWHSScan.ScanObjectModel.Messages;
 using System.Net;
 using System.Net.Mail;
 using PdfSharp.Pdf;
 using System.IO;
 using sbWHSScan.Provider.Email;
+using log4net;
 
 namespace sbWHSScan.Provider.Handlers
 {
-    public class ScanToEmailHandler : IMessageHandler<ScanToEmailRequest>
+    public class ScanToEmailHandler
     {
-        public ResponseMessageBase Handle(ScanToEmailRequest message)
+        private ILog logger = log4net.LogManager.GetLogger(typeof(ScanToEmailHandler).FullName);
+
+        public ScanToEmailResponse Handle(ScanToEmailRequest message)
         {
             ScanToEmailResponse response = new ScanToEmailResponse();
 
@@ -23,6 +26,7 @@ namespace sbWHSScan.Provider.Handlers
             ScanAdapter adapter = new ScanAdapter(message.DeviceId, message.PaperSize, message.ScanSource);
             PdfDocument pdfDoc = adapter.ScanToPDF();
 
+            logger.Debug(string.Format("Address: {0}  Password: {1}", message.EmailAddress, message.EmailPassword));
             GMailProvider emailProvider = new GMailProvider();
             emailProvider.EmailAddress = message.EmailAddress;
             emailProvider.EmailPassword = message.EmailPassword;
@@ -31,11 +35,6 @@ namespace sbWHSScan.Provider.Handlers
             emailProvider.Execute();
 
             return response;
-        }
-
-        public ResponseMessageBase Handle(RequestMessageBase message)
-        {
-            return this.Handle(message as ScanToEmailRequest);
         }
     }
 }

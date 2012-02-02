@@ -6,11 +6,14 @@ using PdfSharp.Pdf;
 using System.Net;
 using System.Net.Mail;
 using System.IO;
+using log4net;
 
 namespace sbWHSScan.Provider.Email
 {
     class GMailProvider
     {
+        private ILog logger = log4net.LogManager.GetLogger(typeof(GMailProvider).FullName);
+
         public string EmailAddress { get; set; }
         public string EmailPassword { get; set; }
         public PdfDocument PdfDoc { get; set; }

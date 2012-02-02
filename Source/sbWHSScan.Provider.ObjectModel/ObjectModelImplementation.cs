@@ -4,9 +4,9 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using Microsoft.WindowsServerSolutions.Common.ProviderFramework;
-using sbWHSScan.Provider.ObjectModel.Messages;
+using sbWHSScan.ScanObjectModel.Messages;
 
-namespace sbWHSScan.Provider.ObjectModel
+namespace sbWHSScan.ScanObjectModel
 {
     public class ObjectModelImplementation : IProviderCallback
     {
@@ -16,7 +16,7 @@ namespace sbWHSScan.Provider.ObjectModel
         public ObjectModelImplementation(ObjectModel receiver)
         {
             m_receiver = receiver;
-            m_connector = ConnectorFactory.GetConnector<IProvider>("provider", this);
+            m_connector = ConnectorFactory.GetServerConnector<IProvider>("provider", this);
             m_connector.ConnectionOpened += m_connector_ConnectionOpened;
             m_connector.ConnectionClosed += m_connector_ConnectionClosed;
         }
@@ -47,11 +47,11 @@ namespace sbWHSScan.Provider.ObjectModel
             }
         }
 
-        public void SendRequest(RequestMessageBase message)
+        public void SendScannerListRequest(GetScannerListRequest message)
         {
             try
             {
-                m_connector.Connection.SendRequest(message);
+                m_connector.Connection.SendScannerListRequest(message);
             }
             catch (CommunicationException)
             {
@@ -62,10 +62,31 @@ namespace sbWHSScan.Provider.ObjectModel
                 // we don't really care here, although timeouts in a local system
                 // generally represent an error case.
             }
-
         }
 
-        public void ResponseReceived(ResponseMessageBase message)
+        public void SendScanToEmailRequest(ScanToEmailRequest message)
+        {
+            try
+            {
+                m_connector.Connection.SendScanToEmailRequest(message);
+            }
+            catch (CommunicationException)
+            {
+                // we don't care, the disconnection will be handled by our handler
+            }
+            catch (TimeoutException)
+            {
+                // we don't really care here, although timeouts in a local system
+                // generally represent an error case.
+            }
+        }
+
+        public void ScannerListReceived(GetScannerListResponse message)
+        {
+            m_receiver.ReceiveResponse(message);
+        }
+
+        public void ScanToEmailReceived(ScanToEmailResponse message)
         {
             m_receiver.ReceiveResponse(message);
         }

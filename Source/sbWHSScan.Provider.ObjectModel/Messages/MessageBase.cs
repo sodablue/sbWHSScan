@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Reflection;
 
-namespace sbWHSScan.Provider.ObjectModel.Messages
+namespace sbWHSScan.ScanObjectModel.Messages
 {
     [KnownType("KnownTypes")]
     public class RequestMessageBase

@@ -1,12 +1,15 @@
 using System.ServiceModel;
-using sbWHSScan.Provider.ObjectModel.Messages;
+using sbWHSScan.ScanObjectModel.Messages;
 
-namespace sbWHSScan.Provider.ObjectModel
+namespace sbWHSScan.ScanObjectModel
 {
     [ServiceContract]
     public interface IProviderCallback
     {
         [OperationContract(IsOneWay = true)]
-        void ResponseReceived(ResponseMessageBase response);
+        void ScannerListReceived(GetScannerListResponse message);
+
+        [OperationContract(IsOneWay = true)]
+        void ScanToEmailReceived(ScanToEmailResponse message);
     }
 }

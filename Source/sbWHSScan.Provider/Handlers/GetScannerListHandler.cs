@@ -2,24 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using sbWHSScan.Provider.ObjectModel.Messages;
+using sbWHSScan.ScanObjectModel.Messages;
 using WIA;
 
 namespace sbWHSScan.Provider.Handlers
 {
-    public class GetScannerListHandler : IMessageHandler<GetScannerListRequest>
+    public class GetScannerListHandler
     {
-        public ResponseMessageBase Handle(GetScannerListRequest message)
+        public GetScannerListResponse Handle(GetScannerListRequest message)
         {
             GetScannerListResponse response = new GetScannerListResponse();
             response.ScannerList = GetScanners().ToList();
 
             return response;
-        }
-
-        public ResponseMessageBase Handle(RequestMessageBase message)
-        {
-            return this.Handle(message as GetScannerListRequest);
         }
 
         private IEnumerable<GetScannerListResponse.Scanner> GetScanners()

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using sbWHSScan.Provider.ObjectModel.Messages;
+using sbWHSScan.ScanObjectModel.Messages;
 using System.Collections.ObjectModel;
 
-namespace sbWHSScan.Provider.ObjectModel
+namespace sbWHSScan.ScanObjectModel
 {
     public class ObjectModel : INotifyPropertyChanged
     {
@@ -196,9 +196,14 @@ namespace sbWHSScan.Provider.ObjectModel
             m_backend.Connect();
         }
 
-        private void SendRequest(RequestMessageBase message)
+        private void SendScannerListRequest(GetScannerListRequest message)
         {
-            m_backend.SendRequest(message);
+            m_backend.SendScannerListRequest(message);
+        }
+
+        private void SendScanToEmailRequest(ScanToEmailRequest message)
+        {
+            m_backend.SendScanToEmailRequest(message);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -218,7 +223,7 @@ namespace sbWHSScan.Provider.ObjectModel
         internal void ConnectionCompleted()
         {
             Connected = true;
-            this.SendRequest(new GetScannerListRequest());
+            this.SendScannerListRequest(new GetScannerListRequest());
         }
 
         internal void Disconnected()
@@ -234,13 +239,16 @@ namespace sbWHSScan.Provider.ObjectModel
                 this.Scanners.Add(item);
             }
 
-            this.Scanner = response.ScannerList[0];
+            if (response.ScannerList.Count > 0)
+            {
+                this.Scanner = response.ScannerList[0];
+            }
         }
 
         public void Scan()
         {
             this.Status = string.Empty;
-            this.SendRequest(new ScanToEmailRequest { DeviceId = this.Scanner.DeviceId, PaperSize = this.PaperSize, ScanSource = this.ScanSource, EmailProvider = this.EmailProvider, EmailAddress = this.EmailAddress, EmailPassword = this.EmailPassword });
+            this.SendScanToEmailRequest(new ScanToEmailRequest { DeviceId = this.Scanner.DeviceId, PaperSize = this.PaperSize, ScanSource = this.ScanSource, EmailProvider = this.EmailProvider, EmailAddress = this.EmailAddress, EmailPassword = this.EmailPassword });
         }
 
         private byte[] scannedPdf;

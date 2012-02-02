@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace sbWHSScan.Provider.ObjectModel.Messages
+namespace sbWHSScan.ScanObjectModel.Messages
 {
     public class ScanToEmailRequest : RequestMessageBase
     {

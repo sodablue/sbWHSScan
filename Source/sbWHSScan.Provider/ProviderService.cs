@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
-using sbWHSScan.Provider.ObjectModel;
-using sbWHSScan.Provider.ObjectModel.Messages;
+using sbWHSScan.ScanObjectModel;
+using sbWHSScan.ScanObjectModel.Messages;
 
 namespace sbWHSScan.Provider
 {
@@ -32,17 +32,11 @@ namespace sbWHSScan.Provider
         static private ProviderCore s_core = new ProviderCore();
         private IProviderCallback m_callback;
 
-
-        public void SendRequest(RequestMessageBase message)
+        internal void ScannerListReceived(GetScannerListResponse message)
         {
-            m_core.SendOperation(message);
-        }
-
-        internal void SendToClient(ResponseMessageBase message)
-        {
-            try
+                        try
             {
-                m_callback.ResponseReceived(message);
+                m_callback.ScannerListReceived(message);
             }
             catch (CommunicationException)
             {
@@ -52,6 +46,32 @@ namespace sbWHSScan.Provider
             {
                 // we don't really care about this either.
             }
+        }
+
+        internal void ScanToEmailReceived(ScanToEmailResponse message)
+        {
+                        try
+            {
+                m_callback.ScanToEmailReceived(message);
+            }
+            catch (CommunicationException)
+            {
+                // we don't really care...
+            }
+            catch (TimeoutException)
+            {
+                // we don't really care about this either.
+            }
+        }
+
+        public void SendScannerListRequest(GetScannerListRequest message)
+        {
+            m_core.SendScannerListResponse(message);
+        }
+
+        public void SendScanToEmailRequest(ScanToEmailRequest message)
+        {
+            m_core.SendScanToEmailResponse(message);
         }
     }
 }

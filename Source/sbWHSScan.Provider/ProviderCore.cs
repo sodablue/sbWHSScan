@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using sbWHSScan.Provider.ObjectModel.Messages;
+using sbWHSScan.ScanObjectModel.Messages;
 using sbWHSScan.Provider.Handlers;
 using System.Reflection;
 
@@ -13,13 +13,28 @@ namespace sbWHSScan.Provider
         private HashSet<ProviderService> m_connections = new HashSet<ProviderService>();
         private object m_syncRoot = new object();
 
-        public void SendOperation(RequestMessageBase message)
+        public void SendScannerListResponse(GetScannerListRequest message)
         {
             lock (m_syncRoot)
             {
                 foreach (var connection in m_connections)
                 {
-                    connection.SendToClient(RequestProcessor.Handle(message));
+                    GetScannerListHandler handler = new GetScannerListHandler();
+                    
+                    connection.ScannerListReceived(handler.Handle(message));
+                }
+            }
+        }
+
+        public void SendScanToEmailResponse(ScanToEmailRequest message)
+        {
+            lock (m_syncRoot)
+            {
+                foreach (var connection in m_connections)
+                {
+                    ScanToEmailHandler handler = new ScanToEmailHandler();
+
+                    connection.ScanToEmailReceived(handler.Handle(message));
                 }
             }
         }

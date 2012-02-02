@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using sbWHSScan.Provider.ObjectModel.Messages;
+using sbWHSScan.ScanObjectModel.Messages;
 
-namespace sbWHSScan.Provider.ObjectModel
+namespace sbWHSScan.ScanObjectModel
 {
     public class ResponseReceivedEventArgs : EventArgs
     {
